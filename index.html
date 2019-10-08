@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Joe's Hotdogs</title>
+<style>
+    body {
+        background-color: #161616
+    }
+    form {
+        color: #FFFFFF;
+    }
+    h1 {
+        text-align: center;
+        color: #B41C11;
+    }
+    img {
+        height: 130px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    p {
+        font-size: 20px;
+        color: #5CDB95;
+        text-align: center;
+    }
+</style>
+
+</head>
+
+<body>
+    <h1>Joe's Hot Dogs</h1>
+    <img src="dance.png" alt="Hot Dog">
+
+    <form id="orderForm">
+    </form>
+
+    <script language="javascript">
+        var prices = new Array();
+        prices["Hotdogs"] = 3.25;
+        prices["French Fries"] = 2.00;
+        prices["Drinks"] = 1.50;
+
+        // create form
+        var x = document.getElementById("orderForm");
+        var createform = document.createElement('form');
+        createform.setAttribute("action", "");
+        createform.setAttribute("method", "post"); 
+        x.appendChild(createform);
+
+        var heading = document.createElement('h3'); 
+        heading.innerHTML = "Order Here:";
+        createform.appendChild(heading);
+
+        for (var key in prices) {
+            var namelabel = document.createElement('label'); 
+            namelabel.innerHTML = key + " - $" + prices[key].toFixed(2) + " each";
+            createform.appendChild(namelabel);
+
+            var linebreak = document.createElement('br');
+            createform.appendChild(linebreak);
+
+            var element = document.createElement('input');
+            element.setAttribute("type", "number");
+            element.setAttribute("id", key + "Box");
+            createform.appendChild(element);
+
+            var linebreak = document.createElement('br');
+            createform.appendChild(linebreak);
+
+            var linebreak = document.createElement('br');
+            createform.appendChild(linebreak);
+        }
+
+        var submitelement = document.createElement('input'); 
+        submitelement.setAttribute("type", "submit");
+        submitelement.setAttribute("id", "submitBtn");
+        submitelement.setAttribute("value", "Order");
+        createform.appendChild(submitelement);
+
+        document.getElementById("submitBtn").addEventListener("click", 
+                function(){handleOrder()});
+
+        function handleOrder() {
+            var quantities = new Array();
+
+            quantities["Hotdogs"] = 
+                document.getElementById("HotdogsBox").value;
+            quantities["French Fries"] = 
+                document.getElementById("French FriesBox").value;
+            quantities["Drinks"] = 
+                document.getElementById("DrinksBox").value;
+
+            var hotdogSubtotal = quantities["Hotdogs"] * prices["Hotdogs"];
+            var FriesSubtotal = quantities["French Fries"] * prices["French Fries"];
+            var DrinksSubtotal = quantities["Drinks"] * prices["Drinks"];
+
+            var total = hotdogSubtotal + FriesSubtotal + DrinksSubtotal;
+
+            // apply joe's special
+            var discount = 0;
+            var s_discount = "";
+            if (total >= 20) {
+                discount = .1 * total;
+                total -= discount;
+                s_discount = "\n~ JOE'S SPECIAL DISCOUNT ~\n      -$" + 
+                    discount.toFixed(2);
+            }
+
+            // sumaries of items purchased
+            var hotdogSummary = quantities["Hotdogs"] + " Hotdogs:         $" + hotdogSubtotal.toFixed(2);
+            var friesSummary = quantities["French Fries"] + " French Fries:  $" + FriesSubtotal.toFixed(2);
+            var drinksSummary = quantities["Drinks"] + " Drinks:            $" + DrinksSubtotal.toFixed(2);
+            var orderSummary = "~ ORDER SUMMARY ~\n      " + hotdogSummary 
+                + "\n      " + friesSummary + "\n      " + drinksSummary;
+
+            // sales tax
+            var tax = 0.0625 * total;
+            s_tax = tax.toFixed(2);
+            total = total + tax;
+            var s_total = total.toFixed(2);
+
+            // format tax and total
+            s_tax = "\n~ 6.25% MEAL TAX ~\n      +$" + s_tax + "\n";
+            s_total = "~ TOTAL ~\n      $" + s_total;
+
+            alert(orderSummary + s_discount + s_tax + s_total);
+        }
+
+    </script>
+
+    <p>Joe's Special: Spend $20 and get 10% off your order!</p>
+
+</body>
+</html>
